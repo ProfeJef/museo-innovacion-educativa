@@ -1,97 +1,88 @@
-// Datos completos de las 10 estaciones del museo (con tildes correctas)
 const STATIONS = {
-  n1: {
-    zona:'nac', nombre:'I.E. San Mateo — Soacha, Cundinamarca',
-    img:'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=900&q=80',
-    contexto:'Institución oficial de grado séptimo que enfrentaba baja motivación hacia las ciencias exactas y escasa participación femenina en áreas STEM.',
-    enfoque:'Aprendizaje basado en STEM con flexibilización curricular y trabajo interdisciplinar entre matemáticas, tecnología y ciencias naturales.',
-    metodologia:'Aprendizaje Basado en Proyectos (ABP) centrado en el pensamiento computacional mediante retos de programación y construcción robótica.',
-    tics:'Kits de robótica educativa, tarjetas programables tipo micro:bit y entornos de programación por bloques.',
-    aportes:'Incremento medible en la vinculación de estudiantes —incluyendo niñas— a disciplinas STEM y mejora en la resolución colaborativa de problemas.'
-  },
-  n2: {
-    zona:'nac', nombre:'Colegio Gabriel Betancourt Mejía — Bogotá',
-    img:'https://images.unsplash.com/photo-1571260899304-425eee4c7efc?w=900&q=80',
-    contexto:'Colegio público distrital enfocado en acercar la tecnología y la ingeniería a estudiantes bajo el programa "Un TE STEM".',
-    enfoque:'Educación STEM integrada, promoviendo el "usa, modifica y crea" como ruta progresiva de apropiación tecnológica.',
-    metodologia:'Talleres prácticos de programación guiada y aprendizaje experiencial con dispositivos físicos programables.',
-    tics:'Tarjetas micro:bit, sensores y programación por bloques para automatizar sistemas simples.',
-    aportes:'Democratización del acceso a la ingeniería desde edades tempranas y articulación con redes internacionales de innovación STEM.'
-  },
-  n3: {
-    zona:'nac', nombre:'I.E. Jorge Eliécer Gaitán — Medellín',
-    img:'https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=900&q=80',
-    contexto:'Aula de transición (preescolar) que buscaba potenciar el pensamiento crítico y creativo desde los primeros años escolares.',
-    enfoque:'Enfoque STEM+ combinado con eduentretenimiento, situando el juego como vehículo legítimo de aprendizaje.',
-    metodologia:'Gamificación integral del aula: retos, insignias y narrativas lúdicas conectadas a contextos reales.',
-    tics:'Aplicaciones educativas interactivas y recursos multimedia adaptados a la primera infancia.',
-    aportes:'Transformación de prácticas pedagógicas tradicionales en experiencias significativas desde los 5 años.'
-  },
-  n4: {
-    zona:'nac', nombre:'ETITC — Instituto Técnico Central, Bogotá',
-    img:'https://images.unsplash.com/photo-1509062522246-3755977927d7?w=900&q=80',
-    contexto:'Formación técnica media enfocada en competencias ciudadanas y seguridad vial mediante proyectos tecnológicos.',
-    enfoque:'Aprendizaje situado a través de simulación de entornos urbanos reales para enseñar normas de tránsito.',
-    metodologia:'Aprendizaje basado en videojuegos serios (Serious Games) diseñados y programados por los propios estudiantes.',
-    tics:'Plataforma CoSpaces para creación de entornos virtuales 3D navegables y programables.',
-    aportes:'Los estudiantes pasan de consumidores a creadores de contenido inmersivo.'
-  },
-  n5: {
-    zona:'nac', nombre:'I.E. Rural Cuturú (Proyecto DIVA) — Caucasia',
-    img:'https://images.unsplash.com/photo-1610484826967-09c5720778c7?w=900&q=80',
-    contexto:'Zona rural con recursos limitados que requería fortalecer resolución de problemas ligada al contexto local.',
-    enfoque:'Pedagogía crítica situada que articula arte, creatividad y trabajo en equipo como ejes transversales.',
-    metodologia:'Aprendizaje colaborativo por proyectos con producciones artísticas y comunitarias como evidencia.',
-    tics:'Herramientas digitales de bajo costo y recursos audiovisuales sencillos.',
-    aportes:'Modelo replicable de innovación educativa en contextos rurales, centrado en la identidad territorial.'
-  },
-  i1: {
-    zona:'intl', nombre:'Sistema Educativo de Finlandia',
-    img:'https://images.unsplash.com/photo-1580582932707-520aed937b7b?w=900&q=80',
-    contexto:'Sistema público unificado y gratuito, reconocido mundialmente por su equidad y resultados en pruebas PISA.',
-    enfoque:'Educación centrada en el bienestar, con currículo por fenómenos (Phenomenon-Based Learning).',
-    metodologia:'Proyectos interdisciplinarios donde los estudiantes investigan temas reales integrando varias materias.',
-    tics:'Plataformas digitales de seguimiento personalizado y herramientas colaborativas en la nube.',
-    aportes:'Alta autonomía docente y evaluación formativa sin pruebas estandarizadas tempranas.'
-  },
-  i2: {
-    zona:'intl', nombre:'High Tech High — San Diego, Estados Unidos',
-    img:'https://images.unsplash.com/photo-1523240795612-9a054b0db644?w=900&q=80',
-    contexto:'Red de escuelas públicas charter fundada en 2000, referente global del Aprendizaje Basado en Proyectos.',
-    enfoque:'"Deeper Learning": conocimiento aplicado con propósito real y producto público como evidencia.',
-    metodologia:'Proyectos extensos e interdisciplinarios que culminan en exhibiciones públicas.',
-    tics:'Talleres de diseño digital, fabricación (makerspaces) y documentación digital de portafolios.',
-    aportes:'Eliminación de exámenes estandarizados internos y evaluación por rúbricas de competencias.'
-  },
-  i3: {
-    zona:'intl', nombre:'Fundación Escuela Nueva — Reconocimiento Global',
-    img:'https://images.unsplash.com/photo-1580894732930-0babd100d356?w=900&q=80',
-    contexto:'Modelo pedagógico originado en zonas rurales colombianas, adoptado en más de 20 países.',
-    enfoque:'Aprendizaje centrado en el estudiante y aprendizaje entre pares en aulas multigrado.',
-    metodologia:'Guías de aprendizaje autoinstructivas combinadas con trabajo cooperativo rotativo.',
-    tics:'Bibliotecas digitales rurales y aplicaciones offline para conectividad limitada.',
-    aportes:'Escalabilidad comprobada en contextos de pobreza, con impacto en más de 5 millones de estudiantes.'
-  },
-  i4: {
-    zona:'intl', nombre:'Método Singapur de Matemáticas',
-    img:'https://images.unsplash.com/photo-1584697964358-3e14ca57658b?w=900&q=80',
-    contexto:'Currículo nacional de Singapur, líder recurrente en TIMSS y PISA en el área de matemáticas.',
-    enfoque:'Progresión Concreto-Pictórico-Abstracto (CPA) antes del simbolismo formal.',
-    metodologia:'Resolución de problemas mediante representaciones visuales (bar modeling) y manipulables físicos.',
-    tics:'Simuladores interactivos de modelos de barras y práctica adaptativa con retroalimentación inmediata.',
-    aportes:'Dominio de menos temas con mayor profundidad, reduciendo la memorización mecánica.'
-  },
-  i5: {
-    zona:'intl', nombre:'Rocketship Public Schools — Estados Unidos',
-    img:'https://images.unsplash.com/photo-1516534775068-ba3e7458af70?w=900&q=80',
-    contexto:'Red de escuelas públicas para comunidades de bajos ingresos, con foco en cerrar brechas de aprendizaje.',
-    enfoque:'Aprendizaje híbrido (Blended Learning) combinando instrucción personalizada con estaciones digitales.',
-    metodologia:'Rotación por estaciones: pequeños grupos con docente, colaborativo entre pares y práctica individual.',
-    tics:'Software de aprendizaje adaptativo que ajusta dificultad según desempeño en tiempo real.',
-    aportes:'Uso de datos de desempeño para personalizar rutas de aprendizaje individuales.'
-  }
+  n1: { zona:'nac', nombre:'1. Aulas del Siglo XXI - Computadores para Educar',
+    img:'https://images.unsplash.com/photo-1568658176307-e730ceea3576?w=800',
+    contexto:'Escuelas públicas urbanas con brechas de equipamiento superadas en el territorio nacional.',
+    enfoque:'Constructivismo social y alfabetización digital crítica.',
+    metodologia:'Aprendizaje Basado en Proyectos (ABP) transdisciplinares.',
+    tics:'Laboratorios virtuales, tabletas con software interactivo sin necesidad de conectividad permanente y kits de robótica educativa de bajo costo.',
+    aportes:'Democratización del acceso tecnológico mediante contenidos regionales precargados para superar barreras de conectividad.' },
+  n2: { zona:'nac', nombre:'2. Escuela Nueva Activa - Innovación Rural',
+    img:'https://images.unsplash.com/photo-1509062522246-3755977927d7?w=800',
+    contexto:'Aulas multigrado en zonas rurales dispersas de difícil acceso geográfico.',
+    enfoque:'Aprendizaje centrado en el estudiante, cooperativo y adaptado a ritmos individuales de desarrollo.',
+    metodologia:'Aprendizaje Cooperativo Adaptativo respaldado por guías de autoaprendizaje contextualizadas.',
+    tics:'Plataformas móviles de seguimiento comunitario, recursos educativos digitales en audio (podcasts didácticos) y terminales con carga solar.',
+    aportes:'Flexibilidad absoluta del calendario escolar para asimilar los ciclos agrícolas de la región sin penalizar la permanencia del estudiante.' },
+  n3: { zona:'nac', nombre:'3. Ruta STEM+A - Tecnoacademias SENA',
+    img:'https://images.unsplash.com/photo-1581092921461-eab62e97a780?w=800',
+    contexto:'Educación media técnica formal articulada con centros avanzados de desarrollo tecnológico.',
+    enfoque:'Enfoque STEM+A (Ciencia, Tecnología, Ingeniería, Matemáticas + Arte) orientado a la resolución de problemáticas del entorno real.',
+    metodologia:'Aprendizaje Basado en Retos (ABR) apoyado en metodologías de Ingeniería de Diseño.',
+    tics:'Modelado e impresión 3D, entornos virtuales de simulación de circuitos electrónicos, programación estructurada/bloques e IA para análisis de datos.',
+    aportes:'Espacios de co-creación entre estudiantes de secundaria e investigadores técnicos para formular patentes y prototipos funcionales locales.' },
+  n4: { zona:'nac', nombre:'4. Aulas en Paz - Convivencia Digital',
+    img:'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=800',
+    contexto:'Instituciones educativas vulnerables o afectadas por dinámicas complejas de convivencia social.',
+    enfoque:'Educación socioemocional orientada al desarrollo sistemático de competencias ciudadanas críticas.',
+    metodologia:'Juego de Roles (Role-playing) y debates guiados basados en dilemas morales auténticos de la cotidianidad.',
+    tics:'Videojuegos serios (simuladores interactivos de toma de decisiones), narrativas transmedia y foros digitales de mediación escolar.',
+    aportes:'Integración orgánica de la salud mental y la empatía dentro del currículo académico estándar usando métricas de seguimiento digital.' },
+  n5: { zona:'nac', nombre:'5. Territorios Creativos - Computadores para Educar Innova',
+    img:'https://images.unsplash.com/photo-1460661419201-fd4cecdf8a8b?w=800',
+    contexto:'Instituciones educativas de carácter étnico e intercultural en regiones de alta diversidad cultural.',
+    enfoque:'Etnoeducación activa e interculturalidad crítica fundamentada.',
+    metodologia:'Aprendizaje Basado en la Indagación coordinado con ejercicios de cartografía social comunitaria.',
+    tics:'Herramientas digitales de traducción para lenguas nativas desarrolladas en clase, producción audiovisual para el rescate oral y sistemas de información geográfica (SIG).',
+    aportes:'Fusión de saberes y tradiciones ancestrales con herramientas tecnológicas modernas para asegurar la preservación de la identidad.' },
+  i1: { zona:'intl', nombre:'6. Modelo Fenómeno (Phenomenon-Based Learning) — Finlandia',
+    img:'https://images.unsplash.com/photo-1544717305-2782549b5136?w=800',
+    contexto:'Sistema educativo nacional público descentralizado, enfocado en equidad social.',
+    enfoque:'Aprendizaje holístico, integrado y profundamente contextualizado en la vida real.',
+    metodologia:'Aprendizaje Basado en Fenómenos, suprimiendo las divisiones rígidas de las asignaturas tradicionales.',
+    tics:'Entornos virtuales de aprendizaje integrados (LMS), aplicaciones de co-diseño digital y portafolios interactivos en la nube.',
+    aportes:'Abordaje de problemáticas globales (v.g., cambio climático) movilizando simultáneamente conceptos de geografía, química, economía e historia.' },
+  i2: { zona:'intl', nombre:'7. High Tech High — San Diego, Estados Unidos',
+    img:'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=800',
+    contexto:'Red de escuelas públicas charter de alta diversidad, pionera en el diseño curricular alternativo.',
+    enfoque:'"Deeper Learning": conocimiento aplicado con propósitos reales y transferencia al entorno público.',
+    metodologia:'Aprendizaje Basado en Proyectos (ABP) de largo alcance que culminan obligatoriamente en exposiciones comunitarias.',
+    tics:'Software de diseño arquitectónico y modelado CAD, herramientas colaborativas de gestión de proyectos (Trello, Asana) y suites multimedia.',
+    aportes:'Sustitución de exámenes estandarizados por defensas públicas de portafolios ante expertos e infraestructura escolar de planta abierta.' },
+  i3: { zona:'intl', nombre:'8. Movimiento Maker — Tinkering Studio (Exploratorium)',
+    img:'https://images.unsplash.com/photo-1564013799919-ab600027ffc6?w=800',
+    contexto:'Red global de espacios de aprendizaje no formal y laboratorios escolares de experimentación activa.',
+    enfoque:'Construccionismo pedagógico puro enfocado en el aprendizaje mediante el diseño y el ensayo-error.',
+    metodologia:'Tinkering (pensar con las manos) combinando arte, ciencia y tecnología lúdica.',
+    tics:'Microcontroladores de hardware libre (Arduino, Makey Makey), sensores ambientales de código abierto y maquinaria de fabricación digital.',
+    aportes:'Reencuadre del error escolar como un proceso iterativo normalizado, eliminando la frustración mediante el rediseño continuo.' },
+  i4: { zona:'intl', nombre:'9. Aulas Inteligentes — Singapur (Smart Nation)',
+    img:'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=800',
+    contexto:'Escuelas hiperconectadas de alto rendimiento técnico bajo la política institucional "Thinking Schools, Learning Nation".',
+    enfoque:'Desarrollo sistemático del pensamiento computacional y habilidades metacognitivas superiores.',
+    metodologia:'Resolución de problemas complejos estructurada sobre la progresión metodológica Concreto-Pictórico-Abstracto (CPA).',
+    tics:'Tutores inteligentes basados en IA adaptativa, analíticas de aprendizaje masivas en tiempo real y entornos inmersivos de realidad aumentada.',
+    aportes:'Plataformas adaptativas que modifican la complejidad del problema en tiempo real por estudiante, facilitando la intervención oportuna del maestro.' },
+  i5: { zona:'intl', nombre:'10. Red Global de Aprendizaje (NPDL) — Michael Fullan',
+    img:'https://images.unsplash.com/photo-1552664730-d307ca884978?w=800',
+    contexto:'Asociación internacional de centros escolares orientada a la transformación profunda de las prácticas de enseñanza.',
+    enfoque:'Marco de las "6 Cs": Carácter, Ciudadanía, Colaboración, Comunicación, Creatividad y Pensamiento Crítico.',
+    metodologia:'Aprendizaje Profundo (Deep Learning) catalizado por alianzas de impacto con el entorno social circundante.',
+    tics:'Redes globales de comunicación escolar, plataformas para videoconferencias de co-diseño multinacional y rúbricas de evaluación en la nube.',
+    aportes:'Evaluación sistémica del progreso educativo mediante un tejido de rúbricas interconectadas a nivel mundial en diversos continentes.' }
 };
 
-// Posiciones relativas dentro de cada sala (offset respecto al origen de #roomNac / #roomIntl)
-const LAYOUT_NAC  = { n1:[-11,2.5,-14,0], n2:[-11,2.5,-4,0], n3:[-11,2.5,6,0], n4:[10,2.5,-14,180], n5:[10,2.5,-4,180] };
-const LAYOUT_INTL = { i1:[-10,2.5,-14,180], i2:[-10,2.5,-4,180], i3:[-10,2.5,6,180], i4:[11,2.5,-14,0], i5:[11,2.5,-4,0] };
+// Posiciones dentro de cada sala: [x, y, z, rotY, imgThumb, etiqueta corta]
+const LAYOUT_NAC = {
+  n1: [-14.8, 2.8, -12, 90,  'https://images.unsplash.com/photo-1568658176307-e730ceea3576?w=500', '1. Computadores para Educar'],
+  n2: [-14.8, 2.8, -1,  90,  'https://images.unsplash.com/photo-1509062522246-3755977927d7?w=500', '2. Escuela Nueva Activa'],
+  n3: [-14.8, 2.8, 10,  90,  'https://images.unsplash.com/photo-1581092921461-eab62e97a780?w=500', '3. Ruta STEM+A SENA'],
+  n4: [14.8,  2.8, -12, -90, 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=500', '4. Aulas en Paz'],
+  n5: [14.8,  2.8, -1,  -90, 'https://images.unsplash.com/photo-1460661419201-fd4cecdf8a8b?w=500', '5. Territorios Creativos']
+};
+const LAYOUT_INTL = {
+  i1: [-14.8, 2.8, -12, 90,  'https://images.unsplash.com/photo-1544717305-2782549b5136?w=500', '6. Modelo Finlandia'],
+  i2: [-14.8, 2.8, -1,  90,  'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=500', '7. High Tech High'],
+  i3: [-14.8, 2.8, 10,  90,  'https://images.unsplash.com/photo-1564013799919-ab600027ffc6?w=500', '8. Movimiento Maker'],
+  i4: [14.8,  2.8, -12, -90, 'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=500', '9. Metodo Singapur'],
+  i5: [14.8,  2.8, -1,  -90, 'https://images.unsplash.com/photo-1552664730-d307ca884978?w=500', '10. Red Global NPDL']
+};
