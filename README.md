@@ -5,7 +5,7 @@ reales de innovación pedagógica, divididos en dos galerías: Nacional (Colombi
 e Internacional (referentes mundiales).
 
 ## 🎮 Demo en vivo
-👉 https://TU-USUARIO.github.io/museo-innovacion-educativa/
+👉 https://profejef.github.io/museo-innovacion-educativa/
 
 ## 🕹️ Controles
 - **WASD / Flechas** — caminar
@@ -31,7 +31,7 @@ e Internacional (referentes mundiales).
 
 ## 🚀 Cómo ejecutar localmente
 ```bash
-git clone https://github.com/TU-USUARIO/museo-innovacion-educativa.git
+git clone https://profejef.github.io/museo-innovacion-educativa/
 cd museo-innovacion-educativa
 python -m http.server 8080
 ```
@@ -40,7 +40,7 @@ Abre `http://localhost:8080` en tu navegador.
 ## 🌐 Publicar en GitHub Pages
 1. Ve a **Settings → Pages** en tu repositorio.
 2. En "Branch", selecciona `main` y carpeta `/ (root)`.
-3. Guarda; en 1-2 minutos tu museo estará en `https://TU-USUARIO.github.io/museo-innovacion-educativa/`.
+3. Guarda; en 1-2 minutos tu museo estará en `https://profejef.github.io/museo-innovacion-educativa//`.
 
 ## 📚 Fuentes de los casos nacionales
 Basado en experiencias documentadas por Colombia Aprende y el Ministerio de
