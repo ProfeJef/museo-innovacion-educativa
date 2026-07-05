@@ -30,10 +30,19 @@ AFRAME.registerComponent('gallery-panel', {
     text.setAttribute('color', this.data.key.startsWith('n') ? '#1b3a1b' : '#0d2b4e');
     this.el.appendChild(text);
 
-    this.el.setAttribute('class', 'clickable');
-    this.el.addEventListener('click', () => window.openStation(this.data.key));
-    this.el.addEventListener('mouseenter', () => this.el.setAttribute('scale', '1.08 1.08 1.08'));
-    this.el.addEventListener('mouseleave', () => this.el.setAttribute('scale', '1 1 1'));
+    // FIX CLIC: plano invisible que cubre TODO el cuadro y es el ÚNICO que
+    // recibe el clic real. Antes el listener estaba en el padre (this.el),
+    // pero A-Frame dispara 'click' sobre el hijo golpeado por el raycaster
+    // y ese evento no sube (bubble) al padre — por eso nunca se abría el modal.
+    const hit = document.createElement('a-plane');
+    hit.setAttribute('width', 4.5); hit.setAttribute('height', 3.7);
+    hit.setAttribute('position', '0 0 0.05');
+    hit.setAttribute('material', 'opacity:0; transparent:true');
+    hit.setAttribute('class', 'clickable');
+    hit.addEventListener('click', () => window.openStation(this.data.key));
+    hit.addEventListener('mouseenter', () => this.el.setAttribute('animation__hover', 'property: scale; to: 1.08 1.08 1.08; dur: 150'));
+    hit.addEventListener('mouseleave', () => this.el.setAttribute('animation__hover', 'property: scale; to: 1 1 1; dur: 150'));
+    this.el.appendChild(hit);
   }
 });
 
