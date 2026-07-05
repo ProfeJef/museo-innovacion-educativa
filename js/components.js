@@ -1,4 +1,3 @@
-// Componente: convierte cada estación en un cuadro clicable con marco, spotlight e imagen
 AFRAME.registerComponent('gallery-panel', {
   schema: { key: {type:'string'} },
   init: function () {
@@ -34,7 +33,7 @@ AFRAME.registerComponent('gallery-panel', {
     this.el.appendChild(label);
 
     const light = document.createElement('a-entity');
-    light.setAttribute('light', `type:spot; color:#fffde7; intensity:1.35; angle:38; penumbra:0.45; target:#none`);
+    light.setAttribute('light', `type:spot; color:#fffde7; intensity:1.35; angle:38; penumbra:0.45`);
     light.setAttribute('position', '0 2.6 2.6');
     light.setAttribute('rotation', '-42 0 0');
     this.el.appendChild(light);
@@ -50,7 +49,6 @@ AFRAME.registerComponent('gallery-panel', {
     hit.setAttribute('position', '0 0 0.1');
     hit.setAttribute('material', 'opacity:0; transparent:true');
     hit.setAttribute('class', 'clickable');
-    hit.dataset.key = this.data.key;
     hit.addEventListener('click', () => window.openStation(this.data.key));
     hit.addEventListener('mouseenter', () => this.el.setAttribute('animation__hover', 'property: scale; to: 1.06 1.06 1.06; dur: 180'));
     hit.addEventListener('mouseleave', () => this.el.setAttribute('animation__hover', 'property: scale; to: 1 1 1; dur: 180'));
@@ -58,7 +56,6 @@ AFRAME.registerComponent('gallery-panel', {
   }
 });
 
-// Tótem central decorativo con rotación continua
 AFRAME.registerComponent('spin', {
   schema: { speed:{default:20} },
   tick: function (time, delta) {
@@ -66,33 +63,54 @@ AFRAME.registerComponent('spin', {
   }
 });
 
-// Avatar: el cuerpo gira según el yaw de la cámara y anima piernas/brazos al caminar.
-// La cámara es HIJA del mismo rig que tiene wasd-controls, así que jamás se desincroniza.
-AFRAME.registerComponent('body-walk', {
+/*
+  FIX ESTRUCTURAL DEL BUG DE CÁMARA:
+  wasd-controls y look-controls ahora viven JUNTOS en #playerCam.
+  Este componente hace que el cuerpo visible del docente (#avatarBody)
+  SIGA a la cámara en cada frame (posición X/Z + rotación Y), en vez de
+  intentar que la cámara siga al cuerpo. Es la relación correcta en A-Frame.
+  Tecla "R" fuerza un recentrado instantáneo sin animación, por si el
+  usuario nota cualquier desfase visual tras teletransportes o colisiones.
+*/
+AFRAME.registerComponent('teacher-follow', {
+  schema: { cam: {type:'selector'} },
   init: function () {
     this.last = new THREE.Vector3();
     this.t = 0;
-    this.cam = document.querySelector('#playerCam');
-    this.body = document.querySelector('#avatarBody');
+    window.addEventListener('keydown', (e) => {
+      if (e.key.toLowerCase() === 'r') this.snap = true;
+    });
   },
   tick: function (time, delta) {
+    if (!this.data.cam) return;
+    const camPos = this.data.cam.object3D.getWorldPosition(new THREE.Vector3());
+    const camYaw = this.data.cam.object3D.rotation.y;
+
+    if (this.snap) {
+      this.el.object3D.position.set(camPos.x, 0, camPos.z);
+      this.el.object3D.rotation.y = camYaw;
+      this.snap = false;
+      if (window.showToast) window.showToast('📍 Cámara y docente recentrados');
+    } else {
+      this.el.object3D.position.x = camPos.x;
+      this.el.object3D.position.z = camPos.z;
+      this.el.object3D.rotation.y = camYaw;
+    }
+
     const pos = this.el.object3D.position;
     const dist = pos.distanceTo(this.last);
     this.last.copy(pos);
     const moving = dist > 0.0006;
 
-    if (this.cam && this.body) this.body.object3D.rotation.y = this.cam.object3D.rotation.y;
-
     this.t += moving ? delta * 0.016 : 0;
-    const swing = moving ? Math.sin(this.t * 6) * 25 : 0;
-    const legL = document.querySelector('#legL'), legR = document.querySelector('#legR');
-    const armL = document.querySelector('#armL'), armR = document.querySelector('#armR');
+    const swing = moving ? Math.sin(this.t * 6) * 22 : 0;
+    const legL = this.el.querySelector('#legL'), legR = this.el.querySelector('#legR');
+    const armL = this.el.querySelector('#armL'), armR = this.el.querySelector('#armR');
     if (legL) legL.object3D.rotation.x = THREE.MathUtils.degToRad(swing);
     if (legR) legR.object3D.rotation.x = THREE.MathUtils.degToRad(-swing);
-    if (armL) armL.object3D.rotation.x = THREE.MathUtils.degToRad(-swing * 0.7);
-    if (armR) armR.object3D.rotation.x = THREE.MathUtils.degToRad(swing * 0.7);
+    if (armL) armL.object3D.rotation.x = THREE.MathUtils.degToRad(-swing * 0.6);
+    if (armR) armR.object3D.rotation.x = THREE.MathUtils.degToRad(swing * 0.6);
 
-    // Actualiza minimapa y detecta cercanía a estaciones para el sistema de logros
     if (window.onPlayerMove) window.onPlayerMove(pos);
   }
 });
