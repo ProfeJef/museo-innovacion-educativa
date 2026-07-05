@@ -65,6 +65,7 @@ document.addEventListener('DOMContentLoaded', () => {
   buildRoom('#roomNac', LAYOUT_NAC);
   buildRoom('#roomIntl', LAYOUT_INTL);
 
+  // ================= MODAL: incluye ahora poblacion y evidencia =================
   window.openStation = function (key) {
     const s = STATIONS[key];
     document.getElementById('modalImg').src = s.img;
@@ -74,12 +75,18 @@ document.addEventListener('DOMContentLoaded', () => {
       <span class="tag ${s.zona}">${s.zona === 'nac' ? 'Galería Nacional' : 'Galería Internacional'}</span>
       <h2>${s.nombre}</h2>
       <h4>Contexto educativo</h4><p>${s.contexto}</p>
+      <h4>Población beneficiada</h4><p>${s.poblacion}</p>
       <h4>Enfoque pedagógico</h4><p>${s.enfoque}</p>
       <h4>Metodología activa actualizada</h4><p>${s.metodologia}</p>
       <h4>Uso de TICs</h4><p>${s.tics}</p>
-      <h4>Aportes innovadores</h4><p>${s.aportes}</p>`;
+      <h4>Aportes innovadores</h4><p>${s.aportes}</p>
+      <h4>Evidencia de impacto</h4><p>${s.evidencia}</p>`;
     document.getElementById('modalOverlay').style.display = 'flex';
     window.freezeCamera();
+
+    // HUD de progreso
+    window.visitedStations.add(key);
+    document.getElementById('progressCount').textContent = window.visitedStations.size;
   };
 
   function closeModal() {
@@ -96,4 +103,28 @@ document.addEventListener('DOMContentLoaded', () => {
   const scene = document.querySelector('a-scene');
   const hideLoading = () => document.getElementById('loading').style.display = 'none';
   scene.hasLoaded ? hideLoading() : scene.addEventListener('loaded', hideLoading);
+
+  // ================= PANTALLA DE INICIO: activa Pointer Lock con gesto directo =================
+  document.getElementById('startBtn').addEventListener('click', () => {
+    document.getElementById('startScreen').style.display = 'none';
+    const canvas = document.querySelector('a-scene').canvas;
+    if (canvas && canvas.requestPointerLock) canvas.requestPointerLock();
+  });
+
+  // ================= HUD DE PROGRESO =================
+  window.visitedStations = new Set();
+
+  // ================= MINIMAPA =================
+  const dot = document.getElementById('minimapDot');
+  const rig = document.querySelector('#rig');
+  function updateMinimap() {
+    if (!rig) return;
+    const pos = rig.object3D.position;
+    const mapX = 50 + (pos.x / 33) * 45;
+    const mapY = 50 + (pos.z / 19) * 45;
+    dot.style.left = mapX + '%';
+    dot.style.top = mapY + '%';
+    requestAnimationFrame(updateMinimap);
+  }
+  updateMinimap();
 });
