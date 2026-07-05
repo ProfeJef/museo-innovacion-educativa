@@ -1,120 +1,79 @@
-<!DOCTYPE html>     
+<!DOCTYPE html>
 <html lang="es">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Museo Virtual de Innovación Educativa</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
 <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 
-<div id="loading">
-  <div class="loader-ring"></div>
-  <h1>Museo Virtual de Innovación Educativa</h1>
-  <small>Cargando salas, iluminación y contenidos…</small>
-</div>
-
-<div id="hud">
-  <div id="hint">🎮 WASD / Flechas: caminar &nbsp;·&nbsp; 🖱️ Mouse: mirar &nbsp;·&nbsp; 👆 Clic: leer caso &nbsp;·&nbsp; ⌨️ R: recentrar</div>
-  <div id="progress">
-    <span id="progressLabel">Estaciones visitadas: 0 / 10</span>
-    <div id="progressBar"><div id="progressFill"></div></div>
-  </div>
-  <div id="minimap">
-    <div class="mm-title">MAPA</div>
-    <div class="mm-zone mm-nac">NAC</div>
-    <div class="mm-zone mm-intl">INTL</div>
-    <div id="mm-dot"></div>
-  </div>
-</div>
+<div id="loading">Cargando Museo Virtual de Innovación Educativa... 🎓</div>
+<div id="hint">WASD: caminar · Mouse: mirar · Clic: abrir cuadro · V: cámara 1ª/3ª · R: recentrar</div>
 
 <div id="modalOverlay">
   <div id="modalCard">
     <button id="closeBtn">✕</button>
-    <div id="modalImgWrap"><img id="modalImg" src="" alt=""></div>
+    <img id="modalImg" src="" alt="">
     <div id="modalBody"></div>
   </div>
 </div>
 
-<div id="toast"></div>
+<a-scene shadow="type: pcfsoft" fog="type: linear; color: #dce7f0; near: 25; far: 70">
 
-<a-scene shadow="type: pcfsoft" fog="type: exponential; color:#080d16; density:0.011" renderer="colorManagement:true; physicallyCorrectLights:true">
+  <a-entity light="type: ambient; color: #ffffff; intensity: 0.9"></a-entity>
+  <a-entity light="type: directional; color: #ffffff; intensity: 0.5; castShadow: true" position="5 15 5"></a-entity>
 
-  <a-assets timeout="12000"></a-assets>
-
-  <a-sky color="#060a12"></a-sky>
-
-  <a-entity light="type: ambient; color:#7ea6c9; intensity:0.35"></a-entity>
-  <a-entity light="type: hemisphere; color:#aeeaff; groundColor:#0a0f1a; intensity:0.4"></a-entity>
-  <a-entity light="type: directional; color:#fff3d6; intensity:0.35; castShadow:true" position="2 18 4"></a-entity>
-
-  <!-- ============ VESTÍBULO CENTRAL ============ -->
-  <a-entity id="lobby">
-    <a-plane rotation="-90 0 0" width="9" height="44" color="#1c2230" material="metalness:0.4; roughness:0.4"></a-plane>
-    <a-plane rotation="90 0 0" width="9" height="44" position="0 8.6 0" color="#0b0f16"></a-plane>
-    <a-entity light="type:point; color:#ffd54f; intensity:1.2; distance:12" position="0 6 -20"></a-entity>
-    <a-entity light="type:point; color:#fff3d6; intensity:0.7; distance:8" position="0 3 8"></a-entity>
-
-    <a-text value="MUSEO VIRTUAL DE" align="center" position="0 7.1 -21" width="10" color="#8fa3bd"></a-text>
-    <a-text value="INNOVACION EDUCATIVA" align="center" position="0 6.5 -21" width="15" color="#ffd54f"></a-text>
-    <a-text value="Un recorrido interactivo por experiencias que transforman el aula" align="center" position="0 5.7 -21" width="8" color="#c3ccd6"></a-text>
-
-    <a-cylinder radius="0.09" height="8.6" color="#ffd54f" position="0 4.3 -21.2" material="metalness:0.7; roughness:0.2"></a-cylinder>
-    <a-cylinder radius="0.09" height="8.6" color="#ffd54f" position="3.2 4.3 -21.2" material="metalness:0.7; roughness:0.2"></a-cylinder>
-    <a-cylinder radius="0.09" height="8.6" color="#ffd54f" position="-3.2 4.3 -21.2" material="metalness:0.7; roughness:0.2"></a-cylinder>
-  </a-entity>
+  <a-plane rotation="-90 0 0" width="8" height="42" color="#b0bec5" position="0 0 0"></a-plane>
+  <a-plane rotation="90 0 0" width="8" height="42" position="0 8 0" color="#eceff1"></a-plane>
+  <a-text value="MUSEO VIRTUAL DE INNOVACION EDUCATIVA" align="center" position="0 5 -19.5" width="14" color="#102a43"></a-text>
 
   <!-- Las salas y estaciones se generan dinámicamente desde js/main.js usando js/data.js -->
   <a-entity id="roomNac" position="-19 0 0"></a-entity>
   <a-entity id="roomIntl" position="19 0 0"></a-entity>
 
-  <!-- ================= CÁMARA (única fuente de verdad del movimiento) =================
-       IMPORTANTE: wasd-controls Y look-controls viven JUNTOS aquí. Esto es lo que
-       corrige el bug histórico donde el avatar no respetaba la dirección del mouse. -->
-  <a-entity id="playerCam" position="0 1.6 17" wasd-controls="acceleration:45" look-controls="pointerLockEnabled:true" camera>
-    <a-cursor color="#ffd54f" raycaster="objects:.clickable; far:8"></a-cursor>
+  <!-- ================= RIG UNIFICADO: wasd + look + bounds + pitch juntos ================= -->
+  <a-entity id="rig" position="0 1.6 16"
+            wasd-controls="acceleration:50"
+            look-controls
+            museum-bounds
+            pitch-limit="max:75">
+    <a-camera id="playerCam" look-controls="enabled:false">
+      <a-cursor color="#ffffff"
+                raycaster="objects: .clickable"
+                animation__click="property: scale; startEvents: click; easing: easeInCubic; dur: 150; from: 0.1 0.1 0.1; to: 1 1 1"
+                animation__fusing="property: scale; startEvents: fusing; easing: easeInCubic; dur: 1500; from: 1 1 1; to: 0.1 0.1 0.1"
+                animation__mouseleave="property: scale; startEvents: mouseleave; easing: easeInCubic; dur: 500; to: 1 1 1">
+      </a-cursor>
+    </a-camera>
   </a-entity>
 
-  <!-- ================= AVATAR DOCENTE (sigue a la cámara; tecla R recentra) ================= -->
-  <a-entity id="avatarBody" teacher-follow="cam:#playerCam" position="0 0 17">
-
-    <!-- Torso: camisa formal azul oscuro -->
+  <!-- ================= AVATAR DOCENTE (visible solo en 3ª persona) ================= -->
+  <a-entity id="avatar" follow-player="target:#rig; cam:#playerCam" position="0 0 16" visible="false">
     <a-box position="0 1.05 0" width="0.46" height="0.62" depth="0.28" color="#2c3e6b" material="metalness:0.1; roughness:0.7" shadow="cast:true"></a-box>
-    <!-- Solapas de blazer -->
     <a-box position="-0.2 1.05 0.13" width="0.1" height="0.6" depth="0.06" color="#1a2340" shadow="cast:true"></a-box>
     <a-box position="0.2 1.05 0.13" width="0.1" height="0.6" depth="0.06" color="#1a2340" shadow="cast:true"></a-box>
-    <!-- Cabeza -->
     <a-sphere position="0 1.56 0" radius="0.17" color="#e8b18a" shadow="cast:true"></a-sphere>
-    <!-- Cabello -->
     <a-sphere position="0 1.62 -0.02" radius="0.17" theta-start="0" theta-length="95" color="#3e2c23" shadow="cast:true"></a-sphere>
-    <!-- Gafas -->
     <a-torus position="-0.06 1.56 0.15" radius="0.045" radius-tubular="0.008" color="#222"></a-torus>
     <a-torus position="0.06 1.56 0.15" radius="0.045" radius-tubular="0.008" color="#222"></a-torus>
-    <!-- Corbata -->
     <a-box position="0 1.0 0.145" width="0.06" height="0.32" depth="0.02" color="#a83232"></a-box>
-
     <a-entity id="armL" position="-0.31 1.32 0">
       <a-box position="0 -0.22 0" width="0.12" height="0.44" depth="0.13" color="#2c3e6b" shadow="cast:true"></a-box>
     </a-entity>
     <a-entity id="armR" position="0.31 1.32 0">
       <a-box position="0 -0.22 0" width="0.12" height="0.44" depth="0.13" color="#2c3e6b" shadow="cast:true"></a-box>
     </a-entity>
-
-    <!-- Pantalón -->
     <a-entity id="legL" position="-0.12 0.72 0">
       <a-box position="0 -0.36 0" width="0.17" height="0.72" depth="0.17" color="#4a4a52" shadow="cast:true"></a-box>
     </a-entity>
     <a-entity id="legR" position="0.12 0.72 0">
       <a-box position="0 -0.36 0" width="0.17" height="0.72" depth="0.17" color="#4a4a52" shadow="cast:true"></a-box>
     </a-entity>
-    <!-- Zapatos -->
     <a-box position="-0.12 0.34 0.05" width="0.18" height="0.1" depth="0.28" color="#1a1a1a"></a-box>
     <a-box position="0.12 0.34 0.05" width="0.18" height="0.1" depth="0.28" color="#1a1a1a"></a-box>
-
-    <a-text value="Docente Guía" align="center" position="0 1.98 0" width="2.4" color="#ffd54f" side="double"></a-text>
+    <a-text value="Docente Guía" align="center" position="0 1.98 0" width="2.4" color="#102a43" side="double"></a-text>
   </a-entity>
 
 </a-scene>
