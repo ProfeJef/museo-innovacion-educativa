@@ -47,4 +47,5 @@ Basado en experiencias documentadas por Colombia Aprende y el Ministerio de
 Educación Nacional (Escuelas STEM+, robótica educativa, aulas activas).
 
 ## 📄 Licencia
-MIT — libre para uso educativo y adaptación.
+MIT — libre para uso educativo y adaptación. 
+Eduquémonos
