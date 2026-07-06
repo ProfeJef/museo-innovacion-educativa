@@ -119,4 +119,15 @@ document.addEventListener('DOMContentLoaded', () => {
   const scene = document.querySelector('a-scene');
   const hideLoading = () => document.getElementById('loading').style.display = 'none';
   scene.hasLoaded ? hideLoading() : scene.addEventListener('loaded', hideLoading);
+    // Reintento defensivo: si el pointer lock se pierde inesperadamente
+  // mientras la escena está activa (fuera del modal), lo volvemos a pedir
+  // en el siguiente clic del usuario sobre el canvas.
+  const canvasEl = document.querySelector('a-scene').canvas;
+  document.addEventListener('click', (e) => {
+    const modalOpen = document.getElementById('modalOverlay').style.display === 'flex';
+    const startOpen = document.getElementById('startScreen').style.display !== 'none';
+    if (!modalOpen && !startOpen && document.pointerLockElement !== canvasEl && canvasEl.requestPointerLock) {
+      canvasEl.requestPointerLock();
+    }
+  });
 });
