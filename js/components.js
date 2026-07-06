@@ -68,7 +68,7 @@ AFRAME.registerComponent('pitch-limit', {
 
 // ============ FIX 3: avatar docente 1ª/3ª persona (V) + recentrado (R) ============
 AFRAME.registerComponent('follow-player', {
-  schema: { target: {type:'selector'}, cam: {type:'selector'} },
+  schema: { targetSel: {type:'string', default:'#rig'}, camSel: {type:'string', default:'#playerCam'} },
   init: function () {
     this.last = new THREE.Vector3();
     this.t = 0;
@@ -81,7 +81,9 @@ AFRAME.registerComponent('follow-player', {
   },
   toggleView: function () {
     this.thirdPerson = !this.thirdPerson;
-    const camObj = this.data.cam.object3D;
+    const camEl = document.querySelector(this.data.camSel);
+    if (!camEl) return;
+    const camObj = camEl.object3D;
     if (this.thirdPerson) {
       camObj.position.set(0, 1.0, 2.8);
       camObj.rotation.x = THREE.MathUtils.degToRad(-12);
@@ -91,10 +93,13 @@ AFRAME.registerComponent('follow-player', {
     }
   },
   tick: function (time, delta) {
-    if (!this.data.target) return;
-    const tPos = this.data.target.object3D.position;
+    // FIX: buscamos el rig en cada frame en vez de depender de un selector
+    // resuelto una sola vez al inicio (que podía quedar null por timing).
+    const targetEl = document.querySelector(this.data.targetSel);
+    if (!targetEl) return;
+    const tPos = targetEl.object3D.position;
     this.el.object3D.position.set(tPos.x, 0, tPos.z);
-    this.el.object3D.rotation.y = this.data.target.object3D.rotation.y;
+    this.el.object3D.rotation.y = targetEl.object3D.rotation.y;
     this.el.setAttribute('visible', this.thirdPerson);
 
     const dist = tPos.distanceTo(this.last);
