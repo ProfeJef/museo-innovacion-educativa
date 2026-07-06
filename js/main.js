@@ -65,7 +65,8 @@ document.addEventListener('DOMContentLoaded', () => {
   buildRoom('#roomNac', LAYOUT_NAC);
   buildRoom('#roomIntl', LAYOUT_INTL);
 
-  // ================= MODAL: incluye ahora poblacion y evidencia =================
+  window.visitedStations = new Set();
+
   window.openStation = function (key) {
     const s = STATIONS[key];
     document.getElementById('modalImg').src = s.img;
@@ -83,8 +84,6 @@ document.addEventListener('DOMContentLoaded', () => {
       <h4>Evidencia de impacto</h4><p>${s.evidencia}</p>`;
     document.getElementById('modalOverlay').style.display = 'flex';
     window.freezeCamera();
-
-    // HUD de progreso
     window.visitedStations.add(key);
     document.getElementById('progressCount').textContent = window.visitedStations.size;
   };
@@ -100,39 +99,24 @@ document.addEventListener('DOMContentLoaded', () => {
   });
   document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeModal(); });
 
-  const scene = document.querySelector('a-scene');
-  const hideLoading = () => document.getElementById('loading').style.display = 'none';
-  scene.hasLoaded ? hideLoading() : scene.addEventListener('loaded', hideLoading);
-
-  // ================= PANTALLA DE INICIO: activa Pointer Lock con gesto directo =================
-    document.getElementById('startBtn').addEventListener('click', () => {
+  document.getElementById('startBtn').addEventListener('click', () => {
     document.getElementById('startScreen').style.display = 'none';
-    const canvas = document.querySelector('a-scene').canvas;
-    if (!canvas) return;
-    // FIX: esperamos al siguiente frame para que el navegador termine de
-    // procesar la pérdida de foco del botón removido ANTES de pedir el lock.
-    // Pedirlo en el mismo tick que ocultamos el botón hacía que el navegador
-    // revocara el lock silenciosamente (por el cambio abrupto de foco).
-    requestAnimationFrame(() => {
-      canvas.focus();
-      if (canvas.requestPointerLock) canvas.requestPointerLock();
-    });
   });
 
-  // ================= HUD DE PROGRESO =================
-  window.visitedStations = new Set();
-
-  // ================= MINIMAPA =================
   const dot = document.getElementById('minimapDot');
   const rig = document.querySelector('#rig');
   function updateMinimap() {
     if (!rig) return;
     const pos = rig.object3D.position;
-    const mapX = 50 + (pos.x / 33) * 45;
-    const mapY = 50 + (pos.z / 19) * 45;
+    const mapX = 50 + (pos.x / 33.5) * 45;
+    const mapY = 50 + (pos.z / 19.3) * 40;
     dot.style.left = mapX + '%';
     dot.style.top = mapY + '%';
     requestAnimationFrame(updateMinimap);
   }
   updateMinimap();
+
+  const scene = document.querySelector('a-scene');
+  const hideLoading = () => document.getElementById('loading').style.display = 'none';
+  scene.hasLoaded ? hideLoading() : scene.addEventListener('loaded', hideLoading);
 });
