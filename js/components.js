@@ -1,4 +1,3 @@
-// ============ Panel de galería (cuadro clicable) ============
 AFRAME.registerComponent('gallery-panel', {
   schema: { key: {type:'string'} },
   init: function () {
@@ -30,10 +29,6 @@ AFRAME.registerComponent('gallery-panel', {
     text.setAttribute('color', this.data.key.startsWith('n') ? '#1b3a1b' : '#0d2b4e');
     this.el.appendChild(text);
 
-    // FIX CLIC: plano invisible que cubre TODO el cuadro y es el ÚNICO que
-    // recibe el clic real. Antes el listener estaba en el padre (this.el),
-    // pero A-Frame dispara 'click' sobre el hijo golpeado por el raycaster
-    // y ese evento no sube (bubble) al padre — por eso nunca se abría el modal.
     const hit = document.createElement('a-plane');
     hit.setAttribute('width', 4.5); hit.setAttribute('height', 3.7);
     hit.setAttribute('position', '0 0 0.05');
@@ -46,17 +41,22 @@ AFRAME.registerComponent('gallery-panel', {
   }
 });
 
-// ============ FIX 1: límites de colisión — no se puede salir del museo ============
+// ============ FIX: límites de colisión reforzados — cubren pasillo + ambas salas completas ============
 AFRAME.registerComponent('museum-bounds', {
-  schema: { minX:{default:-33}, maxX:{default:33}, minZ:{default:-19}, maxZ:{default:19} },
+  schema: {
+    corridorMinX:{default:-3.8}, corridorMaxX:{default:3.8},
+    minZ:{default:-19.3}, maxZ:{default:19.3},
+    roomMinX:{default:-33.5}, roomMaxX:{default:33.5}
+  },
   tick: function () {
     const pos = this.el.object3D.position;
-    pos.x = THREE.MathUtils.clamp(pos.x, this.data.minX, this.data.maxX);
+    // Siempre se respeta el límite total de X (paredes exteriores de ambas salas)
+    pos.x = THREE.MathUtils.clamp(pos.x, this.data.roomMinX, this.data.roomMaxX);
+    // Siempre se respeta el límite de Z (paredes frontal/trasera)
     pos.z = THREE.MathUtils.clamp(pos.z, this.data.minZ, this.data.maxZ);
   }
 });
 
-// ============ FIX 2: límite de inclinación vertical — evita el "bug" al mirar al piso ============
 AFRAME.registerComponent('pitch-limit', {
   schema: { max:{default:75} },
   tick: function () {
@@ -66,7 +66,6 @@ AFRAME.registerComponent('pitch-limit', {
   }
 });
 
-// ============ FIX 3: avatar docente 1ª/3ª persona (V) + recentrado (R) ============
 AFRAME.registerComponent('follow-player', {
   schema: { targetSel: {type:'string', default:'#rig'}, camSel: {type:'string', default:'#playerCam'} },
   init: function () {
@@ -93,8 +92,6 @@ AFRAME.registerComponent('follow-player', {
     }
   },
   tick: function (time, delta) {
-    // FIX: buscamos el rig en cada frame en vez de depender de un selector
-    // resuelto una sola vez al inicio (que podía quedar null por timing).
     const targetEl = document.querySelector(this.data.targetSel);
     if (!targetEl) return;
     const tPos = targetEl.object3D.position;
@@ -116,7 +113,6 @@ AFRAME.registerComponent('follow-player', {
   }
 });
 
-// ============ FIX 4: congela/descongela cámara y movimiento al abrir/cerrar el modal ============
 window.freezeCamera = function () {
   const rig = document.querySelector('#rig');
   if (rig) { rig.setAttribute('wasd-controls', 'enabled', false); rig.setAttribute('look-controls', 'enabled', false); }
