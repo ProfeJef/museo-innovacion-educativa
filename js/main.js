@@ -103,8 +103,9 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('startScreen').style.display = 'none';
   });
 
-  const dot = document.getElementById('minimapDot');
   const rig = document.querySelector('#rig');
+
+  const dot = document.getElementById('minimapDot');
   function updateMinimap() {
     if (!rig) return;
     const pos = rig.object3D.position;
@@ -116,26 +117,14 @@ document.addEventListener('DOMContentLoaded', () => {
   }
   updateMinimap();
 
-  const scene = document.querySelector('a-scene');
-  const hideLoading = () => document.getElementById('loading').style.display = 'none';
-  scene.hasLoaded ? hideLoading() : scene.addEventListener('loaded', hideLoading);
-    // Reintento defensivo: si el pointer lock se pierde inesperadamente
-  // mientras la escena está activa (fuera del modal), lo volvemos a pedir
-  // en el siguiente clic del usuario sobre el canvas.
-  const canvasEl = document.querySelector('a-scene').canvas;
-  document.addEventListener('click', (e) => {
-    const modalOpen = document.getElementById('modalOverlay').style.display === 'flex';
-    const startOpen = document.getElementById('startScreen').style.display !== 'none';
-    if (!modalOpen && !startOpen && document.pointerLockElement !== canvasEl && canvasEl.requestPointerLock) {
-      canvasEl.requestPointerLock();
-    }
+  // ================= HUD DE DIAGNÓSTICO TEMPORAL =================
   const debugHud = document.getElementById('debugHud');
   function updateDebug() {
     if (rig && debugHud) {
       const p = rig.object3D.position;
       const r = rig.object3D.rotation;
-      const cam = document.querySelector('#playerCam');
-      const camR = cam ? cam.object3D.rotation : {x:0,y:0,z:0};
+      const camEl = document.querySelector('#playerCam');
+      const camR = camEl ? camEl.object3D.rotation : {x:0};
       debugHud.textContent =
         `rig pos: x=${p.x.toFixed(1)} y=${p.y.toFixed(1)} z=${p.z.toFixed(1)} | ` +
         `rig rotY=${THREE.MathUtils.radToDeg(r.y).toFixed(1)}° | ` +
@@ -144,5 +133,8 @@ document.addEventListener('DOMContentLoaded', () => {
     requestAnimationFrame(updateDebug);
   }
   updateDebug();
-  });
+
+  const scene = document.querySelector('a-scene');
+  const hideLoading = () => document.getElementById('loading').style.display = 'none';
+  scene.hasLoaded ? hideLoading() : scene.addEventListener('loaded', hideLoading);
 });
